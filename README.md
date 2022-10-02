@@ -16,6 +16,7 @@ release artifact to be distributed to users.
     to not having proper clang installed. Seems working now.
   * can't use a complex path on the output, keeps complaining about file / path not found.
     Basically -o option needs to be a simple file, something like "build/app.bin" doesn't work.
+    smells like bug.
   * it would be better to have another package mode with a .jar + libs dir + script launcher,
     but doesn't seem supported. assmebly seems to be the more correct one, since at least
     it's not doing that crazy thing about downloading files on demand at the start of the app.
@@ -25,11 +26,11 @@ release artifact to be distributed to users.
   * having a packagingType defined in the settings file makes it impossible to try to package
     scala native binary since it keeps complaining about assembly not being a valid thing.
     workaround is yet again moving the thing to the command in the justfile and use the flags 
-    -- assembly instead. This was scala native packaging works.
+    -- assembly instead. This way scala native packaging works.
   * trying to use the file directives seems pretty broken or not really working as expected
     when just trying to call scala-cli directly pointing to either the project.settings.scala
     directly or the . directory and then trying to include other folders like the example folder.
-    The workaround is to no use that directive and control the files and folders in use directly
+    The workaround is to not use that directive and control the files and folders in use directly
     in the justfile by being explicit.
 
 ## Build / Development
@@ -38,6 +39,8 @@ release artifact to be distributed to users.
 
   * jvm (optional) - either an installation with proper `JAVA_HOME` correctly set or the tool auto
     manages and downloads a jvm itself for usage
+  * clang (optional) - this is needed for the targets related to compile and use scala-native. better
+    check upstream scala-native docs about needed libs on the machine.
   * [scala-cli](https://scala-cli.virtuslab.org/) (tested with version 0.1.15)
   * [just](https://github.com/casey/just)
 

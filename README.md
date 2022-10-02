@@ -37,10 +37,10 @@ release artifact to be distributed to users.
 
 ### Requirements
 
-  * jvm (optional) - either an installation with proper `JAVA_HOME` correctly set or the tool auto
+  * jvm >= 17 (optional) - either an installation with proper `JAVA_HOME` correctly set or the tool auto
     manages and downloads a jvm itself for usage
   * clang (optional) - this is needed for the targets related to compile and use scala-native. better
-    check upstream scala-native docs about needed libs on the machine.
+    check [upstream scala-native docs about needed libs on the machine](https://www.scala-native.org/en/stable/user/setup.html).
   * [scala-cli](https://scala-cli.virtuslab.org/) (tested with version 0.1.15)
   * [just](https://github.com/casey/just)
 

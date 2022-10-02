@@ -1,6 +1,7 @@
 name := `pwd | awk -F/ '{print $NF}'`
 
 settingsfile := "project.settings.scala"
+settingsfile-with-native := settingsfile + " " + "project.settings.native.scala"
 
 bindirs     := "bin"
 libdirs     := "lib"
@@ -20,7 +21,7 @@ build:
 
 # Experiment if build works under scala native.
 build-native:
-  scala-cli compile {{ settingsfile }} project.settings.native.scala {{ srcdirs }}
+  scala-cli compile {{ settingsfile-with-native }} {{ srcdirs }}
 
 # Run the main of the application.
 run:
@@ -28,7 +29,7 @@ run:
 
 # Experiment running as scala-native.
 run-native:
-  scala-cli run {{ settingsfile }} project.settings.native.scala {{ srcdirs }}
+  scala-cli run {{ settingsfile-with-native }} {{ srcdirs }}
  
 # Clean any artifacts from building the file.
 clean:

@@ -45,7 +45,11 @@ test:
 
 # Packages the application in an executable that needs jvm to run.
 package:
-  scala-cli package {{ settingsfile }} {{ srcdirs }} --force --output {{ name }}
+  scala-cli package --assembly {{ settingsfile }} {{ srcdirs }} --force --output {{ name }}.jvm.bin
+
+# Packages the application in an executable compiled to machine code using scala-native.
+package-native:
+  scala-cli package {{ settingsfile-with-native }} {{ srcdirs }} --force --output {{ name }}.native.bin
 
 # Format application source files. Check .scalafmt.conf for formatting settings.
 format:

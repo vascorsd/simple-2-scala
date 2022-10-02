@@ -11,4 +11,11 @@
 //> using testFramework "weaver.framework.CatsEffect"
 
 // ---- Packaging settings ----
-//> using packaging.packageType "assembly"
+
+// YET Again another problem.
+// if this is defined explicitly then if I try to package scala native
+// it conflicts and keeps gettting annoying error about assembly pakcatype not supported.
+// so yet again something that needs to be told at command line instead of a using directive
+// it seems.
+
+//!> using packaging.packageType "assembly"

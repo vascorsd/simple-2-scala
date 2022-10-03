@@ -10,6 +10,10 @@ testdirs    := "tests"
 exampledirs := "examples"
 docsdirs    := "docs"
 
+alias b := build
+alias compile := build
+alias c := build
+alias check := build
 
 # Lists available commands to run for this application.
 default:
@@ -19,7 +23,7 @@ default:
 build:
   scala-cli compile {{ settingsfile }} {{ srcdirs }}
 
-# Experiment if build works under scala native.
+# Build under scala native.
 build-native:
   scala-cli compile {{ settingsfile-with-native }} {{ srcdirs }}
 
@@ -27,7 +31,7 @@ build-native:
 run:
   scala-cli run {{ settingsfile }} {{ srcdirs }}
 
-# Experiment running as scala-native.
+# Run as scala-native.
 run-native:
   scala-cli run {{ settingsfile-with-native }} {{ srcdirs }}
  
@@ -71,3 +75,6 @@ run-example EXAMPLE="":
     scala-cli run {{ settingsfile }} {{ libdirs }} {{ exampledirs }} --main-class $main
   fi
 
+# Check if there are updates to the libraries in the project
+updates-check:
+  scala-cli dependency-update {{ settingsfile }} {{ srcdirs }} {{ testdirs }} {{ exampledirs }} 

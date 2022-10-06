@@ -8,3 +8,5 @@
 // ---- Dependencies ----
 //> using lib "org.typelevel::cats-core::2.8.0"
 //> using lib "org.typelevel::cats-effect::3.3.14"
+
+//> using lib "org.legogroup::woof-core::0.4.7"

@@ -13,6 +13,9 @@ object App extends IOApp:
         _ <- IO.println(s"${Cross.stuff}") *>
                IO.println("heyy " + Util.version)
 
+
+        _ <- IO.println(Cross.currentDirectory())
+
         // using logger from instance summoner
         _ <- Logger[IO].error("log error msg test")
         

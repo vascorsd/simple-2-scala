@@ -88,7 +88,7 @@ run-example example="":
   #!/bin/env bash
   MAIN="{{ example }}"
 
-  if [ -z "$main" ];
+  if [ -z "$MAIN" ];
   then
     echo "Available examples:"
 

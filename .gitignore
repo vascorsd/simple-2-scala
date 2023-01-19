@@ -1,5 +1,7 @@
 .bsp
 .scala-build
 .metals
+.vscode
 
 # release
+*.bin

@@ -1,80 +1,102 @@
 name := `pwd | awk -F/ '{print $NF}'`
 
-settingsfile := "project.settings.scala"
-settingsfile-with-native := settingsfile + " " + "project.settings.native.scala"
+scala-cli-bin := "scala-cli"
+
+settings-file := "project.scala"
+native-settings-file := "project.native.scala"
+all-settings-files := settings-file + " " + native-settings-file
 
 bindirs     := "bin"
 libdirs     := "lib"
-srcdirs     := bindirs + " "  + libdirs
+srcdirs     := bindirs + " " + libdirs
 testdirs    := "tests"
 exampledirs := "examples"
 docsdirs    := "docs"
 
-alias b := build
+alias b       := build
 alias compile := build
-alias c := build
-alias check := build
+alias c       := build
+alias check   := build
+
+alias bn             := build-native
+alias compile-native := build-native
+alias cn             := build-native
+alias check-native   := build-native
+
+alias r  := run
+alias rn := run-native
+
+alias p  := package
+alias pn := package-native
+
+alias fmt := format
 
 # Lists available commands to run for this application.
-default:
+_default:
   @just --list
 
-# Builds the core files and reports compilation errors.
-build:
-  scala-cli compile {{ settingsfile }} {{ srcdirs }}
+_build *files:
+  {{ scala-cli-bin }} compile {{ settings-file }} {{ files }} {{ srcdirs }}
 
-# Build under scala native.
-build-native:
-  scala-cli compile {{ settingsfile-with-native }} {{ srcdirs }}
+_run *files:
+  {{ scala-cli-bin }} run {{ settings-file }} {{ files }} {{ srcdirs }}
+
+_package ext *files:
+  {{ scala-cli-bin }} package --assembly {{ settings-file }} {{ files }} {{ srcdirs }} \
+    --force --output {{ name }}.{{ ext }}
+
+# Builds the core files and reports compilation errors.
+build: (_build)
+
+# Builds under scala native.
+build-native: (_build native-settings-file)
 
 # Run the main of the application.
-run:
-  scala-cli run {{ settingsfile }} {{ srcdirs }}
+run: (_run)
 
 # Run as scala-native.
-run-native:
-  scala-cli run {{ settingsfile-with-native }} {{ srcdirs }}
+run-native: (_run native-settings-file)
  
 # Clean any artifacts from building the file.
 clean:
-  scala-cli clean {{ settingsfile }}
+  scala-cli clean {{ settings-file }}
 
 # Open a scala repl shell with application code available for use.
 console:
-  scala-cli console {{ settingsfile }} {{ srcdirs }}
+  scala-cli console {{ settings-file }} {{ srcdirs }}
 
 # Runs tests of the application. Tests should be in {{testdirs}} and with suffix '.test.scala'
 test:
-  scala-cli test {{ settingsfile }} {{ srcdirs }} {{ testdirs }}
+  scala-cli test {{ settings-file }} {{ srcdirs }} {{ testdirs }}
 
 # Packages the application in an executable that needs jvm to run.
-package:
-  scala-cli package --assembly {{ settingsfile }} {{ srcdirs }} --force --output {{ name }}.jvm.bin
+package: (_package "jvm.bin")
 
 # Packages the application in an executable compiled to machine code using scala-native.
-package-native:
-  scala-cli package {{ settingsfile-with-native }} {{ srcdirs }} --force --output {{ name }}.native.bin
+package-native: (_package "native.bin" native-settings-file)
 
 # Format application source files. Check .scalafmt.conf for formatting settings.
 format:
-  scala-cli fmt {{ settingsfile }} {{ srcdirs }} {{ exampledirs }} {{ testdirs }}
+  {{ scala-cli-bin }} fmt {{ settings-file }} {{ srcdirs }} {{ exampledirs }} {{ testdirs }}
 
 # Checks if application files are properly formated. Check .scalafmt.conf for formatting settings.
 format-check:
-  scala-cli fmt --check {{ settingsfile }} {{ srcdirs }} {{ exampledirs }} {{ testdirs }}
+  {{ scala-cli-bin }} fmt --check {{ settings-file }} {{ srcdirs }} {{ exampledirs }} {{ testdirs }}
 
 # List examples available and run a specific example.
-run-example EXAMPLE="":
+run-example example="":
   #!/bin/env bash
-  main="{{EXAMPLE}}"
+  MAIN="{{ example }}"
+
   if [ -z "$main" ];
   then
     echo "Available examples:"
-    scala-cli run {{ settingsfile }} {{ libdirs }} {{ exampledirs }} --list-main-classes
+
+    {{ scala-cli-bin }} run {{ settings-file }} {{ libdirs }} {{ exampledirs }} --list-main-classes
   else
-    scala-cli run {{ settingsfile }} {{ libdirs }} {{ exampledirs }} --main-class $main
+    {{ scala-cli-bin }} run {{ settings-file }} {{ libdirs }} {{ exampledirs }} --main-class "$MAIN"
   fi
 
 # Check if there are updates to the libraries in the project
 updates-check:
-  scala-cli dependency-update {{ settingsfile }} {{ srcdirs }} {{ testdirs }} {{ exampledirs }} 
+  {{ scala-cli-bin }} dependency-update {{ settings-file }} {{ srcdirs }} {{ testdirs }} {{ exampledirs }} 
